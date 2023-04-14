@@ -1,1 +1,1 @@
-# Sudoku in Noir
+# Noir Sudoku
