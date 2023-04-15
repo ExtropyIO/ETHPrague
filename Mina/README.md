@@ -1,3 +1,3 @@
 # Sudoku in SnarkyJS
 
-![zkapp](https://docs.minaprotocol.com/img/1_zkApps_Off-Chain_Performance.jpg
+![zkapp](https://github.com/ExtropyIO/ETHZurich/blob/main/Mina/1_zkApps_Off-Chain_Performance.jpg?raw=true)
