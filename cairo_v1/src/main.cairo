@@ -27,7 +27,7 @@ mod SudokuSolver{
     use cairo_v1::utils::helper;
 
 
-    const SUDOKU: u32 = 9_u32;
+    const SUDOKU: u32 = 9;
 
     struct Storage{
         sudoku_storage: LegacyMap::<u32, u32>,
@@ -48,7 +48,7 @@ mod SudokuSolver{
         // check if length correct
         let sudoku_lenght = array_span.len(); 
 
-        assert (sudoku_lenght == 81_usize, 'Length incorrect'); 
+        assert (sudoku_lenght == 81, 'Length incorrect'); 
 
         // check if array numbers are less than 9
         let array_check = array_values.span();
@@ -60,11 +60,11 @@ mod SudokuSolver{
         //////////////////////
         // Check Row
         //////////////////////
-        let mut counter = 0_u32;
+        let mut counter : u32 = 0;
 
         let result_row = loop {
 
-            if counter == 9_u32 {
+            if counter == 9 {
                 break true;
             }
             
@@ -78,7 +78,7 @@ mod SudokuSolver{
                 break false;
             }
 
-            counter += 1_u32;
+            counter += 1;
         };
 
         assert(result_row, 'Failed Row Check');
@@ -86,11 +86,11 @@ mod SudokuSolver{
         //////////////////////
         // Check Column
         //////////////////////
-        let mut counter = 1_u32;
+        let mut counter : u32 = 1;
 
         let result_column = loop {
 
-            if counter == 10_u32 {
+            if counter == 10 {
                 break true;
             }
             
@@ -104,7 +104,7 @@ mod SudokuSolver{
                 break false;
             }
 
-            counter += 1_u32;
+            counter += 1;
         };
 
         assert(result_column, 'Failed Column Check');
@@ -112,18 +112,18 @@ mod SudokuSolver{
         //////////////////////
         // Check Box
         //////////////////////
-        let mut box_column = 0_u32;
-        let mut box_row = 1_u32;
+        let mut box_column : u32 = 0;
+        let mut box_row : u32 = 1;
 
         let _result_box = loop {
 
-            if box_column == 9_u32 {
+            if box_column == 9 {
                 break true;
             }
             
             let _result_box_row = loop {
 
-                if box_row == 10_u32 {
+                if box_row == 10 {
                     break true;
                 }
 
@@ -133,7 +133,7 @@ mod SudokuSolver{
                     break false;
                 }
 
-                box_row += 3_u32;
+                box_row += 3;
                 reset_storage();
             };
 
@@ -141,8 +141,8 @@ mod SudokuSolver{
                 break false;
             }
 
-            box_column += 3_u32;
-            box_row = 1_u32;
+            box_column += 3;
+            box_row = 1;
         };
 
         assert(_result_box, 'Failed Box Check');
@@ -157,11 +157,11 @@ mod SudokuSolver{
     // row has to be from 0 - 8
     fn verify_row(row : u32, mut _array_values: Span::<felt252>) -> bool {
 
-        let mut counter = 0_u32;
+        let mut counter = 0;
 
         let result = loop {
 
-            if counter == 9_u32 {
+            if counter == 9 {
                 break true;
             }
 
@@ -169,13 +169,13 @@ mod SudokuSolver{
             let arr_value = *_array_values.at(formula);
  
             // check if value has been seen at most once
-            if u32_from_felt252(arr_value) == sudoku_storage::read(u32_from_felt252(arr_value) - 1_u32) {
+            if u32_from_felt252(arr_value) == sudoku_storage::read(u32_from_felt252(arr_value) - 1) {
                 // if true, we mark it as 0 
-                sudoku_storage::write(u32_from_felt252(arr_value) -1_u32, 0_u32);
+                sudoku_storage::write(u32_from_felt252(arr_value) -1, 0);
             } else {
                 break false; // value has already been seen once
             }
-            counter += 1_u32;
+            counter += 1;
         };
         result
     }
@@ -183,11 +183,11 @@ mod SudokuSolver{
     // column has to be from 1 - 9
     fn verify_column(column: u32, mut _array_values: Span::<felt252>) -> bool {
 
-        let mut counter = 0_u32;
+        let mut counter : u32 = 0;
 
         let result = loop {
 
-            if counter == 9_u32 {
+            if counter == 9 {
                 break true;
             }
 
@@ -195,24 +195,24 @@ mod SudokuSolver{
             let formula = SUDOKU * counter + column;
 
             // get the value
-            let arr_value = *_array_values.at(formula - 1_u32);
+            let arr_value = *_array_values.at(formula - 1);
 
             // check if value has been seen at most once
-            if u32_from_felt252(arr_value) == sudoku_storage::read(u32_from_felt252(arr_value) - 1_u32) {
+            if u32_from_felt252(arr_value) == sudoku_storage::read(u32_from_felt252(arr_value) - 1) {
                 // if true, we mark it as 0 
-                sudoku_storage::write(u32_from_felt252(arr_value) - 1_u32, 0_u32);
+                sudoku_storage::write(u32_from_felt252(arr_value) - 1, 0);
             } else {
                 break false; // value has already been seen once
             }
-            counter += 1_u32;
+            counter += 1;
         };
         result
     }
 
     fn verify_box(mut row: u32, mut column: u32, mut _array_values: Span::<felt252>) -> bool {
 
-        let row_max = row + 3_u32;
-        let column_max = column + 3_u32;
+        let row_max : u32 = row + 3;
+        let column_max : u32 = column + 3;
 
         let result_column = loop {
 
@@ -232,12 +232,12 @@ mod SudokuSolver{
                 let formula = SUDOKU * column + row;
 
                 // get the value
-                let arr_value = *_array_values.at(formula - 1_u32);
+                let arr_value = *_array_values.at(formula - 1);
 
                 // check if value has been seen at most once
-                if u32_from_felt252(arr_value) == sudoku_storage::read(u32_from_felt252(arr_value) - 1_u32) {
+                if u32_from_felt252(arr_value) == sudoku_storage::read(u32_from_felt252(arr_value) - 1) {
                     // if true, we mark it as 0 
-                    sudoku_storage::write(u32_from_felt252(arr_value) - 1_u32, 0_u32);
+                    sudoku_storage::write(u32_from_felt252(arr_value) - 1, 0);
                 } else {
                     break false; // value has already been seen once
                 }
@@ -249,20 +249,20 @@ mod SudokuSolver{
             }
 
             column += 1;
-            row = row_max - 3_u32; // reseting the row 
+            row = row_max - 3; // reseting the row 
         };
 
         result_column
     }
 
     fn reset_storage(){
-        let mut counter = 0_u32;
+        let mut counter : u32 = 0;
         loop {
-            if counter == 9_u32 {
+            if counter == 9 {
                 break ();
             }
-            sudoku_storage::write(counter, counter + 1_u32);
-            counter += 1_u32;
+            sudoku_storage::write(counter, counter + 1);
+            counter += 1;
         };
     }
 
@@ -276,7 +276,7 @@ mod SudokuSolver{
 
             let value = *array_values.at(0);
 
-            assert(u32_from_felt252(value) < 10_u32, 'Number bigger than 9');
+            assert(u32_from_felt252(value) < 10, 'Number bigger than 9');
 
             array_values.pop_front().unwrap();
 
