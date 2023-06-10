@@ -1,6 +1,7 @@
 import random
 import copy
 import sys
+import os
 
 def generate_sudoku():
     base  = 3
@@ -94,25 +95,29 @@ def write_sudoku_to_file(grid, filename):
         for row in grid:
             for num in row:
                 file.write(f'    arr.append({num});\n')
+
     # output for the smart contract  
     with open(f"{filename}_contract.txt", 'w') as file:
-        for row in grid:
-            for num in row:
-                file.write(f'{num} ')
+        for i, row in enumerate(grid):
+            for j, num in enumerate(row):
+                file.write(f'{num}')
+                if j < len(row) - 1:
+                    file.write(', ')
+            if i < len(grid) - 1:
+                file.write(',\n')
+
 
 
 if __name__ == "__main__":
+    file_path = os.path.dirname(os.path.abspath(__file__))
+    
     board = generate_sudoku()
     temp = copy.deepcopy(board)
+
     print("Generated Sudoku Board")
-    print_board(board, "output//sudoku_unsolved.txt")
+    print_board(board, f"{file_path}/output/sudoku_unsolved.txt")
     solve(temp)
     print("\nSolved Sudoku Board")
-    print_board(temp, "output//sudoku_solved.txt")
+    print_board(temp, f"{file_path}/output/sudoku_solved.txt")
     print("\nExported Sudoku Board")
-    write_sudoku_to_file(temp, 'output//sudoku')
-
-
-# # Example usage
-# sudoku = generate_sudoku()
-# write_sudoku_to_file(sudoku, 'sudoku.txt')
+    write_sudoku_to_file(temp, f'{file_path}/output//sudoku')
